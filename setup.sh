@@ -1,17 +1,5 @@
 #!/bin/bash
 
-# Install uv if missing
-if ! command -v uv &> /dev/null; then
-    echo "Installing uv..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-    [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-
-    if ! command -v uv &> /dev/null; then
-        echo "Failed to install uv. Install manually: curl -LsSf https://astral.sh/uv/install.sh | sh"
-        exit 1
-    fi
-fi
-
 # Project name (defaults to directory name)
 default_name=$(basename "$PWD")
 read -p "Project name [$default_name]: " project_name
