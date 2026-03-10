@@ -75,7 +75,7 @@ uv run main.py
 
 ---
 
-This repository was created using [ai-python-project-template](https://github.com/WxBDM/ai-python-project-template).
+This repository was created using [python-project-template-for-claude](https://github.com/WxBDM/python-project-template-for-claude), as part of the [Python Snacks Newsletter](https://www.pythonsnacks.com)
 EOF
 
 # Commit and push
