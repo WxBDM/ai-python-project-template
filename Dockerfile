@@ -2,7 +2,7 @@ FROM python:VERSION-slim
 
 WORKDIR /app
 
-# Install uv
+# Install uvs
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Copy dependency files
@@ -12,7 +12,7 @@ COPY pyproject.toml ./
 RUN uv sync --no-dev --no-install-project
 
 # Copy application code
-COPY . .
+COPY src/ ./
 
 # Run the application
 CMD ["uv", "run", "main.py"]

@@ -25,28 +25,76 @@ sed -i.bak "s/name = \"python-project-setup-sample\"/name = \"$project_name\"/" 
 # Install dependencies
 uv sync
 
-# Update Dockerfile with Python version
-py_version=$(uv run python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-sed -i.bak "s/python:VERSION-slim/python:${py_version}-slim/" Dockerfile && rm -f Dockerfile.bak
+# Python version
+read -p "Python version (3.8-3.14) [3.14]: " py_version
+py_version=${py_version:-3.14}
+echo "$py_version" > .python-version
+
+# Dockerfile setup
+read -p "Include Dockerfile? (y/N): " include_dockerfile
+if [[ "$include_dockerfile" =~ ^[Yy]$ ]]; then
+    sed -i.bak "s/python:VERSION-slim/python:${py_version}-slim/" Dockerfile && rm -f Dockerfile.bak
+    cat > .dockerignore << 'EOF'
+.git
+.gitignore
+.env
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache
+docs
+*.md
+EOF
+else
+    rm -f Dockerfile
+fi
 
 # Pre-commit hooks
-read -p "Install pre-commit hooks? (recommended) (y/n): " setup_precommit
-[[ "$setup_precommit" =~ ^[Yy]$ ]] && uv run pre-commit install
+read -p "Install pre-commit hooks? (y/N): " setup_precommit
+if [[ "$setup_precommit" =~ ^[Yy]$ ]]; then
+    uv run pre-commit install
+else
+    rm -f .pre-commit-config.yaml
+fi
 
-# Reset git history and clean up
-rm -rf .git
-git init
-git add .
-git commit -m "Initial commit"
+# Clean up template files
+rm -rf images
 rm -- "$0"
 
+# Create stub README
+cat > README.md << EOF
+# $project_name
+
+## Getting Started
+
+\`\`\`bash
+uv run main.py
+\`\`\`
+
+---
+
+This repository was created using [ai-python-project-template](https://github.com/WxBDM/ai-python-project-template).
+EOF
+
+# Commit and push
+git add .
+git commit -m "Initial commit"
+git push
+
 echo ""
-echo "You're all set! This project template uses uv as the package manager."
-echo " Here are some commands to get started:"
+echo "Setup complete!"
 echo ""
+echo "Summary:"
+echo "  Project name: $project_name"
+echo "  Python version: $py_version"
+[[ "$include_dockerfile" =~ ^[Yy]$ ]] && echo "  Dockerfile: included" || echo "  Dockerfile: removed"
+[[ "$setup_precommit" =~ ^[Yy]$ ]] && echo "  Pre-commit hooks: installed" || echo "  Pre-commit hooks: skipped"
+echo ""
+echo "Commands:"
 echo "  uv run main.py          Run your application"
 echo "  uv add <package>        Add a dependency"
-echo "  uv remove <package>     Remove a dependency"
 echo "  uv run pytest           Run tests"
-echo "  uv run mkdocs serve     Preview documentation"
+[[ "$setup_precommit" =~ ^[Yy]$ ]] && echo "" && echo "Pre-commit hooks will run automatically on each commit."
 echo ""

@@ -1,6 +1,12 @@
 # Python Project Template
 
-Start your next Python project with everything already set up.
+A modern Python project starter repository configured for the modern developer.
+
+Bundled together with uv, pre-commit hooks, a Dockerfile, and a pre-configured CLAUDE.md that keeps it from writing garbage.
+
+Use it as a template, launch a pre-written shell script, and you're off to the races.
+
+**Built for developers who want all batteries included**
 
 ## Quick Start
 
@@ -8,15 +14,16 @@ Start your next Python project with everything already set up.
 
 1. Click the green **"Use this template"** button at the top of this page
 2. Select **"Create a new repository"**
-3. Give your project a name and click **"Create repository"**
 
-Once created, clone it to your machine. Open your terminal and run:
+<img src="./images/template-repo-creation.png">
 
-> **New to the terminal?** On Mac, open the "Terminal" app. On Windows, search for "PowerShell".
+3. Fill out the information that GitHub prompts you in that screen.
+
+Once created, clone that repository to your local machine:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_PROJECT_NAME.git
-cd YOUR_PROJECT_NAME
+git clone <clone command>
+cd <your-project-name>
 ```
 
 ### Step 2: Run the setup
@@ -32,7 +39,7 @@ Run the setup script:
 ./setup.sh
 ```
 
-The script will guide you through setup. Just follow the prompts.
+The script will guide you through setup - follow the prompts on screen.
 
 </details>
 
@@ -55,6 +62,11 @@ uv run pre-commit install
 Then open `pyproject.toml` and change the project name, and create an empty `.env` file.
 
 </details>
+
+You'll see a repository that's ready to go, with the initial commit already done for
+you. This is because there's some stubs and placeholders in the base repository that
+is not needed for a fresh Python environment (such as the README file and the
+associated images).
 
 ### Step 3: Start coding
 
